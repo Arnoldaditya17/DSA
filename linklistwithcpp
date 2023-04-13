@@ -1,0 +1,231 @@
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+class node
+{
+public:
+    int data;
+    node *next;
+};
+node *temp, *head, *newnode;
+
+void insertfront()
+{
+    newnode = new node();
+    cout << "Enter data:";
+    cin >> newnode->data;
+    newnode->next = head;
+    head = newnode;
+}
+
+void insertback()
+{
+    newnode = new node();
+    cout << "Entre data:";
+    cin >> newnode->data;
+    newnode->next = NULL;
+    temp = head;
+    while (temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+    temp->next = newnode;
+}
+
+void insertposition(int pos)
+{
+    int count = 0;
+    newnode = new node();
+    cout << "Enter data:";
+    cin >> newnode->data;
+    temp = head;
+    while (temp != NULL)
+    {
+        temp = temp->next;
+        count++;
+    }
+    if (pos > count)
+    {
+        cout << "you can't insert";
+    }
+    else
+    {
+        temp = head;
+        for (int i = 1; i < pos - 1; i++)
+        {
+            temp = temp->next;
+        }
+        newnode->next = temp->next;
+        temp->next = newnode;
+    }
+}
+
+void Deletefront()
+{
+    if (head == 0)
+    {
+        cout << "can't delete";
+    }
+    else
+    {
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
+}
+void Deleteend()
+{
+
+    int count = 0;
+    temp = head;
+    while (temp != NULL)
+    {
+        temp = temp->next;
+        count++;
+    }
+    temp = head;
+    for (int i = 1; i < count - 1; i++)
+    {
+        temp = temp->next;
+    }
+    temp->next = NULL;
+    newnode = temp->next;
+    free(newnode);
+}
+void Deleteposition()
+{
+    int count = 0;
+    int pos;
+    cout << "Entre the position:";
+    cin >> pos;
+    temp = head;
+    while (temp != NULL)
+    {
+        temp = temp->next;
+        count++;
+    }
+    if (pos > count)
+    {
+        cout << "you can't Enter:";
+    }
+    else
+    {
+        temp = head;
+        for (int i = 1; i < pos - 1; i++)
+        {
+            temp = temp->next;
+        }
+        newnode = temp->next;
+        temp->next = newnode->next;
+        free(newnode);
+    }
+}
+
+void Display()
+{
+    temp = head;
+    while (temp != NULL)
+    {
+        cout << temp->data << "->";
+        temp = temp->next;
+    }
+}
+
+int main()
+{
+    char cho;
+    int choice = 1;
+    while (choice == 1)
+    {
+        int n;
+
+        newnode = new node();
+        cout << "Enter data:";
+        cin >> newnode->data;
+        newnode->next = NULL;
+
+        if (head == 0)
+        {
+            head = temp = newnode;
+        }
+        else
+        {
+            temp->next = newnode;
+            temp = newnode;
+        }
+
+        cout << "Do you want to continue:(1/0)";
+        cin >> choice;
+    }
+    do
+    {
+
+        int task;
+
+        cout << "CHOOSE THE TASK:\n";
+        cout << "1.Insert front\n";
+        cout << "2.Insert back\n";
+        cout << "3.Insert position\n";
+        cout << "4.Deletefront\n";
+        cout << "5.Delete position\n";
+        cout << "6.Delete End\n";
+        cout << "7.Display\n";
+
+        cout << "Enter your task:";
+        cin >> task;
+        switch (task)
+        {
+        case 1:
+
+            insertfront();
+
+            break;
+        case 2:
+        {
+            insertback();
+            break;
+        }
+        case 3:
+        {
+            int pos;
+            temp = head;
+            while (temp != NULL)
+            {
+                cout << temp->data << "->";
+                temp = temp->next;
+            }
+            cout << "\nEnter the position:";
+            cin >> pos;
+            insertposition(pos);
+            break;
+        }
+        case 4:
+        {
+            Deletefront();
+            break;
+        }
+        case 5:
+        {
+            Deleteposition();
+            break;
+        }
+        case 6:
+        {
+            Deleteend();
+            break;
+        }
+        case 7:
+        {
+            Display();
+            break;
+        }
+        default:
+            printf("No such case found");
+        }
+
+        cout << "\nDo you want to continue:Y/N";
+        fflush(stdin);
+        cin >> cho;
+    } while (cho == 'y');
+    cout << "THANK YOU!";
+}
