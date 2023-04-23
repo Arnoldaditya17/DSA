@@ -6,7 +6,7 @@ public:
     int data;
     node *next, *pre;
 };
-node *newnode, *head, *temp;
+node *newnode, *head, *temp, *tail;
 
 void insertfront()
 {
@@ -29,27 +29,121 @@ void insertback()
     newnode->next = NULL;
 
     temp = head;
-    while (temp->next!= NULL)
+    while (temp->next != NULL)
     {
         temp = temp->next;
     }
     newnode->pre = temp;
-   
+
     temp->next = newnode;
 }
 
-void insertposition()
+void insertposition(int pos)
 {
+    int count = 0;
+    temp = head;
+    while (temp != NULL)
+    {
+        temp = temp->next;
+        count++;
+    }
+
+    if (pos == count)
+    {
+        insertback();
+    }
+    else if (pos == 1)
+    {
+        insertfront();
+    }
+    else if (pos > count)
+    {
+
+        cout << "can't enter data";
+    }
+    else
+    {
+        newnode = new node();
+        cout << "enter data:";
+        cin >> newnode->data;
+        temp = head;
+        for (int i = 1; i < pos - 1; i++)
+        {
+            temp = temp->next;
+        }
+        newnode->pre = temp;
+        newnode->next = temp->next;
+        temp->next = newnode;
+        temp->next->pre = newnode;
+    }
 }
 
 void deletefront()
 {
+
+    if (head == 0)
+    {
+        cout << "can't delete";
+    }
+    else
+    {
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
+}
+void deleteend()
+{
+    if (tail == NULL)
+    {
+        cout << "list is empty";
+    }
+    else
+    {
+        temp = tail;
+        tail->pre->next = NULL;
+        tail->pre = NULL;
+        free(temp);
+    }
+}
+void deleteposition()
+{
+    int position;
+    int count = 0;
+    cout <<"\n"<<"Enter position:";
+    cin >> position;
+   
+    temp = head;
+    while (temp != NULL)
+    {
+        temp = temp->next;
+        count++;
+    }
+    if (position > count)
+    {
+        cout << "no such position";
+    }
+    else if (position == 1)
+    {
+        deletefront();
+    }
+    else
+    {
+        temp = head;
+        for (int i = 1; i < position; i++)
+        {
+            temp = temp->next;
+        }
+        temp->pre->next = temp->next;
+        temp->next->pre = temp->pre;
+        free(temp);
+    }
 }
 
 void display()
 {
     temp = head;
-    
+
     while (temp != NULL)
     {
         cout << temp->data << "->";
@@ -77,7 +171,7 @@ int main()
             newnode->next = NULL;
             newnode->pre = temp;
             temp->next = newnode;
-            temp = newnode;
+            temp = tail = newnode;
         }
         cout << "more or exit (1,0)";
         cin >> cho;
@@ -86,14 +180,15 @@ int main()
     do
     {
         int task;
-        cout << "\n\n\n\n\n";
+        cout << "\n\n";
         cout << "*********CHOOSE THE TASK:*********\n";
         cout << "1.Insert front\n";
         cout << "2.Insert back\n";
         cout << "3.Insert position\n";
         cout << "4.Deletefront\n";
-        cout << "5.Delete position\n";
-        cout << "6.Delete End\n";
+        cout << "5.Delete End\n";
+        cout << "6.Delete position\n";
+
         cout << "7.Display\n";
         cout << "Enter the task:";
         cin >> task;
@@ -113,13 +208,36 @@ int main()
 
         case 3:
         {
-            insertposition();
+            int pos;
+            temp = head;
+            while (temp != NULL)
+            {
+                cout << temp->data << "->";
+                temp = temp->next;
+            }
+            cout << "\n"
+                 << "Enter position:";
+            cin >> pos;
+
+            insertposition(pos);
             break;
         }
 
         case 4:
         {
             deletefront();
+            break;
+        }
+        case 5:
+        {
+            deleteend();
+            break;
+        }
+        case 6:
+        {
+
+            display();
+            deleteposition();
             break;
         }
         case 7:
@@ -134,18 +252,9 @@ int main()
         }
 
         cout << "\nDo you want to continue y/n:";
-        
 
         cin >> choice;
         fflush(stdin);
     } while (choice == 'y');
     cout << "thank you!";
 }
-
-// cout << "\nreverse printing:\n";
-// node*traverse= temp;
-// while(traverse!=NULL)
-// {
-//     cout << traverse->data << "->";
-//     traverse = traverse->pre;
-// }
